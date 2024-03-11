@@ -1,8 +1,8 @@
 /**
  * Read web server data and analyse hourly access patterns.
  * 
- * @author David J. Barnes and Michael Kölling.
- * @version    2016.02.29
+ * @author Steven Coss
+ * @version 2024-03-11
  */
 public class LogAnalyzer
 {
@@ -100,6 +100,35 @@ public class LogAnalyzer
                 //consider doing something
             }
         }
-        System.out.println( "The busiest hour is :"+hour);
+        System.out.println( "The quietest hour is :"+hour);
     }
+    public void busiestTwoHour()
+    {
+        int biggest =0;
+        int firstHour=0;
+        int secondHour=0;
+        for(int i =0; i < hourCounts.length ; i++)
+        {
+            if(hourCounts[i]>= biggest)
+            {
+                biggest = hourCounts[i];
+                secondHour = firstHour;
+                firstHour = i;
+            }
+        }
+        System.out.println("The busiest Two hours are :"+firstHour+" "+secondHour);
+    }
+    public void questestDay()
+    {
+        
+    }
+    public void busiestDay()
+    {
+        
+    }
+    public void totalAccessesPerMonth()
+    {
+        
+    }
+    
 }
