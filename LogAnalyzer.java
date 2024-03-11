@@ -22,7 +22,7 @@ public class LogAnalyzer
         hourCounts = new int[24];
         this.logName = logName;
         // Create the reader to obtain the data.
-        reader = new LogfileReader(logName+".log");
+        reader = new LogfileReader(logName);
     }
 
     /**
@@ -66,9 +66,40 @@ public class LogAnalyzer
         }
         return total;
     }
-    public String busiestHour()
+    public void busiestHour()
     {
-        
-        return "thing";
+        int biggest = 0;
+        int hour =0;
+        for (int i =0; i < hourCounts.length ; i++)
+        {
+            if(hourCounts[i]>biggest)
+            {
+                biggest = hourCounts[i];
+                hour = i;
+            }
+            if(hourCounts[i] == biggest)
+            {
+                //consider doing something
+            }
+        }
+        System.out.println( "The busiest hour is :"+hour);
+    }
+    public void quiestestHour()
+    {
+        int smallest = hourCounts[0];
+        int hour =0;
+        for (int i =0; i < hourCounts.length ; i++)
+        {
+            if(hourCounts[i]<smallest)
+            {
+                smallest = hourCounts[i];
+                hour = i;
+            }
+            if(hourCounts[i] == smallest && i != 0)
+            {
+                //consider doing something
+            }
+        }
+        System.out.println( "The busiest hour is :"+hour);
     }
 }
