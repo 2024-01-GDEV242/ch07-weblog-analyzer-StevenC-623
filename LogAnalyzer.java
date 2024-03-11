@@ -8,6 +8,7 @@ public class LogAnalyzer
 {
     // Where to calculate the hourly access counts.
     private int[] hourCounts;
+    private int[] dayCounts;
     // Use a LogfileReader to access the data.
     private LogfileReader reader;
     private String logName;
@@ -19,7 +20,9 @@ public class LogAnalyzer
     { 
         // Create the array object to hold the hourly
         // access counts.
+
         hourCounts = new int[24];
+        dayCounts = new int[28];
         this.logName = logName;
         // Create the reader to obtain the data.
         reader = new LogfileReader(logName);
@@ -36,7 +39,14 @@ public class LogAnalyzer
             hourCounts[hour]++;
         }
     }
-
+    public void analyzeDaylyData()
+    {
+        while(reader.hasNext()){
+            LogEntry entry = reader.next();
+            int day = entry.getDay();
+            dayCounts[day]++;
+        }
+    }
     /**
      * Print the hourly counts.
      * These should have been set with a prior
@@ -45,8 +55,17 @@ public class LogAnalyzer
     public void printHourlyCounts()
     {
         System.out.println("Hr: Count");
-        for(int hour = 0; hour < hourCounts.length; hour++) {
+        for(int hour = 0; hour < hourCounts.length; hour++) 
+        {
             System.out.println(hour + ": " + hourCounts[hour]);
+        }
+    }
+    public void printdayCounts()
+    {
+        System.out.println("day: Count");
+        for(int day = 0; day < dayCounts.length; day++) 
+        {
+            System.out.println(day + ": " + dayCounts[day]);
         }
     }
     
@@ -120,13 +139,54 @@ public class LogAnalyzer
     }
     public void questestDay()
     {
-        
+        int smallest = dayCounts[0];
+        int day =0;
+        for (int i =0; i < dayCounts.length ; i++)
+        {
+            if(dayCounts[i]<smallest)
+            {
+                smallest = dayCounts[i];
+                day = i;
+            }
+            if(hourCounts[i] == smallest && i != 0)
+            {
+                //consider doing something
+            }
+        }
+        System.out.println( "The quietest day is :"+day);
     }
     public void busiestDay()
     {
+        int biggest = 0;
+        int day =0;
+        for (int i =0; i < dayCounts.length ; i++)
+        {
+            if(dayCounts[i]>biggest)
+            {
+                biggest = dayCounts[i];
+                day = i;
+            }
+            if(dayCounts[i] == biggest)
+            {
+                //consider doing something
+            }
+        }
+        System.out.println( "The busiest day is :"+day);
         
     }
     public void totalAccessesPerMonth()
+    {
+        
+    }
+    public void questestMonth()
+    {
+        
+    }
+    public void busiestMonth()
+    {
+        
+    }
+    public void averageAccessesPerMonth()
     {
         
     }
