@@ -9,6 +9,7 @@ public class LogAnalyzer
     // Where to calculate the hourly access counts.
     private int[] hourCounts;
     private int[] dayCounts;
+    private int[] monthCounts;
     // Use a LogfileReader to access the data.
     private LogfileReader reader;
     private String logName;
@@ -23,6 +24,7 @@ public class LogAnalyzer
 
         hourCounts = new int[24];
         dayCounts = new int[28];
+        monthCounts = new int[12];
         this.logName = logName;
         // Create the reader to obtain the data.
         reader = new LogfileReader(logName);
@@ -45,6 +47,14 @@ public class LogAnalyzer
             LogEntry entry = reader.next();
             int day = entry.getDay();
             dayCounts[day]++;
+        }
+    }
+    public void analyzeMonthlyData()
+    {
+        while(reader.hasNext()){
+            LogEntry entry = reader.next();
+            int month = entry.getMonth();
+            monthCounts[month]++;
         }
     }
     /**
@@ -176,19 +186,55 @@ public class LogAnalyzer
     }
     public void totalAccessesPerMonth()
     {
-        
+        System.out.println("month: Count");
+        for(int month = 0; month < monthCounts.length; month++) 
+        {
+            System.out.println(month + ": " + monthCounts[month]);
+        }
     }
     public void questestMonth()
     {
-        
+        int smallest = monthCounts[0];
+        int month =0;
+        for (int i =0; i < monthCounts.length ; i++)
+        {
+            if(monthCounts[i]<smallest)
+            {
+                smallest = monthCounts[i];
+                month = i;
+            }
+            if(monthCounts[i] == smallest && i != 0)
+            {
+                //consider doing something
+            }
+        }
+        System.out.println( "The quietest month is :"+month);
     }
     public void busiestMonth()
     {
-        
+        int biggest = 0;
+        int month =0;
+        for (int i =0; i < monthCounts.length ; i++)
+        {
+            if(monthCounts[i]>biggest)
+            {
+                biggest = dayCounts[i];
+                month = i;
+            }
+            if(monthCounts[i] == biggest)
+            {
+                //consider doing something
+            }
+        }
+        System.out.println( "The busiest day is :"+month);
     }
     public void averageAccessesPerMonth()
     {
-        
+        System.out.println("month: Average");
+        for (int i =0 ; i< monthCounts.length; i++)
+        {
+            //System.out.println( i +" : " + monthCounts[i]/
+        }
     }
     
 }
