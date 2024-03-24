@@ -15,7 +15,8 @@ public class LogAnalyzer
     private String logName;
 
     /**
-     * Create an object to analyze hourly web accesses.
+     * Create an object to analyze hourly/dayly/monthly web accesses.
+     * @param logName name of the log to be analyed
      */
     public LogAnalyzer(String logName)
     { 
@@ -39,8 +40,13 @@ public class LogAnalyzer
             LogEntry entry = reader.next();
             int hour = entry.getHour();
             hourCounts[hour]++;
+            
         }
+        reader.reset();
     }
+     /**
+     * Analyze the dayly access data from the log file.
+     */
     public void analyzeDaylyData()
     {
         while(reader.hasNext()){
@@ -48,7 +54,11 @@ public class LogAnalyzer
             int day = entry.getDay();
             dayCounts[day]++;
         }
+        reader.reset();
     }
+     /**
+     * Analyze the monthly access data from the log file.
+     */
     public void analyzeMonthlyData()
     {
         while(reader.hasNext()){
@@ -56,6 +66,7 @@ public class LogAnalyzer
             int month = entry.getMonth();
             monthCounts[month]++;
         }
+        reader.reset();
     }
     /**
      * Print the hourly counts.
@@ -70,6 +81,11 @@ public class LogAnalyzer
             System.out.println(hour + ": " + hourCounts[hour]);
         }
     }
+    /**
+     * Print the dayly counts.
+     * These should have been set with a prior
+     * call to analyzeDaylyData.
+     */
     public void printdayCounts()
     {
         System.out.println("day: Count");
@@ -86,6 +102,11 @@ public class LogAnalyzer
     {
         reader.printData();
     }
+    /**
+     * figures out the total number of accesses and returns it as an int
+     * needs a prior call to analyzeHourlyData.
+     * @return the number of accesses
+     */
     public int numberOfAccesses()
     {
         int total = 0;
@@ -95,6 +116,11 @@ public class LogAnalyzer
         }
         return total;
     }
+    /**
+     * finds out which Hour had the most accesses
+     * needs a prior call to analyzeHourlyData.
+     * in the event of an equal count the earlier hour is printed
+     */
     public void busiestHour()
     {
         int biggest = 0;
@@ -113,6 +139,11 @@ public class LogAnalyzer
         }
         System.out.println( "The busiest hour is :"+hour);
     }
+    /**
+     * figures out which hour had the least ammount of accesses
+     * needs a prior call to analyzeHourlyData.
+     * in the event of an tie the earlier hour is printed
+     */
     public void quiestestHour()
     {
         int smallest = hourCounts[0];
@@ -131,22 +162,45 @@ public class LogAnalyzer
         }
         System.out.println( "The quietest hour is :"+hour);
     }
+    /**
+     * finds out which group of 2 hours is the busiest ones and prints out that data
+     * needs a prior call to analyzeHourlyData.
+     * in the event of an equal count the earlier 2 hours will be printed
+     */
     public void busiestTwoHour()
     {
         int biggest =0;
         int firstHour=0;
-        int secondHour=0;
+        int secondHour =0;
+        int x = 1;
+        
+        //int secondHour=0;
         for(int i =0; i < hourCounts.length ; i++)
         {
-            if(hourCounts[i]>= biggest)
+            if( i == 23)
             {
-                biggest = hourCounts[i];
-                secondHour = firstHour;
+                x = -23;
+            }
+            if(hourCounts[i]+hourCounts[i+x]> biggest)
+            {
+                biggest = hourCounts[i]+hourCounts[i+x];
+                //secondHour = firstHour;
                 firstHour = i;
             }
         }
-        System.out.println("The busiest Two hours are :"+firstHour+" "+secondHour);
+        secondHour= firstHour +2;
+        if(secondHour>23)
+        {
+            secondHour-=23;
+        }
+        
+        System.out.println("The busiest Two hours are from "+firstHour+" till "+secondHour);
     }
+    /**
+     * figures out which day had the least ammount of accesses
+     * needs a prior call to analyzeDaylyData.
+     * in the event of an tie the earlier day is printed
+     */
     public void questestDay()
     {
         int smallest = dayCounts[0];
@@ -165,6 +219,11 @@ public class LogAnalyzer
         }
         System.out.println( "The quietest day is :"+day);
     }
+    /**
+     * figures out which day had the most ammount of accesses
+     * needs a prior call to analyzeDaylyData.
+     * in the event of an tie the earlier day is printed
+     */
     public void busiestDay()
     {
         int biggest = 0;
@@ -184,6 +243,10 @@ public class LogAnalyzer
         System.out.println( "The busiest day is :"+day);
         
     }
+    /**
+     * figures out and prints how many accesses where made per month
+     * needs a prior call to analyzeMonthlyData.
+     */
     public void totalAccessesPerMonth()
     {
         System.out.println("month: Count");
@@ -192,6 +255,11 @@ public class LogAnalyzer
             System.out.println(month + ": " + monthCounts[month]);
         }
     }
+    /**
+     * figures out which month had the least ammount of accesses
+     * needs a prior call to analyzeMonthlyData.
+     * in the event of an tie the earlier month is printed
+     */
     public void questestMonth()
     {
         int smallest = monthCounts[0];
@@ -210,6 +278,11 @@ public class LogAnalyzer
         }
         System.out.println( "The quietest month is :"+month);
     }
+    /**
+     * figures out which month had the most ammount of accesses
+     * needs a prior call to analyzeMonthlyData.
+     * in the event of an tie the earlier month is printed
+     */
     public void busiestMonth()
     {
         int biggest = 0;
@@ -228,13 +301,12 @@ public class LogAnalyzer
         }
         System.out.println( "The busiest day is :"+month);
     }
+    /**
+     * takes the total number of accesses and devides it down to find the avg # of accesses per month
+     */
     public void averageAccessesPerMonth()
     {
-        System.out.println("month: Average");
-        for (int i =0 ; i< monthCounts.length; i++)
-        {
-            //System.out.println( i +" : " + monthCounts[i]/
-        }
+        System.out.println("avg Accesses per Month : "+numberOfAccesses()/12);
     }
     
 }
